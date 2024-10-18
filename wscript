@@ -10,7 +10,7 @@
 # Also consider adding the --nostrip option if working on the wscript, to generate a waf pack
 # that includes comments (or set your WAFDIR variable, see the book). The version you check in
 # should be stripped though to keep size down.
-
+#Hi
 # Onto the actual build script! It's a bit more involved than most waf examples you can find due
 # to the nature of cross-compiling for bare-metal targets.
 
@@ -444,7 +444,10 @@ def get_gcc_srch_path_win32():
     import winreg
 
     REGISTRY_PATHS = [(winreg.HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\ARM")]
-    INSTALL_PATHS = ["D:\\Arm_GNU_Toolchain\\13_3_rel1\\arm-none-eabi"]
+    INSTALL_PATHS = [
+        "C:\\Program Files (x86)\Arm GNU Toolchain arm-none-eabi\\13.3 rel1\\arm-none-eabi", 
+        #"D:\\Arm_GNU_Toolchain\\13_3_rel1\\arm-none-eabi",
+    ]
 
     gcc_vers = defaultdict(set)  # Map from version numbers to discovered paths.
 
