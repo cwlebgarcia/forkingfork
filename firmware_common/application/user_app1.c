@@ -92,7 +92,7 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
-  HEARTBEAT_OFF();
+  PWMAudioSetFrequency(BUZZER1, 500);
   /* If good initialization, set state to Idle */
 
   if( 1 )
@@ -143,29 +143,34 @@ State Machine Function Definitions
 /* What does this state do? */
 static void UserApp1SM_Idle(void)
 {
-  static u16 u16Counter = U16_COUNTER_PERIOD_MS;
-  static u16  divide;
-  u16Counter--;
-  
-
-  if (u16Counter == 0) 
+  if (WasButtonPressed(BUTTON0))
   {
-    u16Counter = U16_COUNTER_PERIOD_MS / divide;
-      static int state = 0;
-
-  if (state == 0)
-  {
-    HEARTBEAT_ON();
-    state = 1;
+    ButtonAcknowledge(BUTTON0);
+    PWMAudioSetFrequency(BUZZER1, 440);
   }
 
-  else if (state == 1)
+  if (WasButtonPressed(BUTTON1))
   {
-    HEARTBEAT_OFF();
-    state = 0;
+    ButtonAcknowledge(BUTTON1);
+    PWMAudioSetFrequency(BUZZER1, 440);
   }
-  divide *= 2;
+
+  if (WasButtonPressed(BUTTON2))
+  {
+    ButtonAcknowledge(BUTTON2);
+    PWMAudioSetFrequency(BUZZER1, 523);
   }
+
+if (WasButtonPressed(BUTTON3))
+  {
+    ButtonAcknowledge(BUTTON3);
+    PWMAudioSetFrequency(BUZZER1, 587);
+  }
+
+  if (IsButtonPressed(BUTTON0) || IsButtonPressed(BUTTON1) || IsButtonPressed(BUTTON2) || IsButtonPressed(BUTTON3))
+    PWMAudioOn(BUZZER1);
+  else
+    PWMAudioOff(BUZZER1);
 } /* end UserApp1SM_Idle() */
      
 
