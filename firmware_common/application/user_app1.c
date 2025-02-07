@@ -143,29 +143,77 @@ State Machine Function Definitions
 /* What does this state do? */
 static void UserApp1SM_Idle(void)
 {
-  static u16 u16Counter = U16_COUNTER_PERIOD_MS;
-  static u16  divide;
-  u16Counter--;
+  static u16 au16NotesRight[] = {F5, F5, F5, F5, F5, E5, D5, E5, F5, G5, A5, A5, A5, A5, A5, G5, F5, G5, A5, A5S, C6, F5, F5, D6, C6, A5S, A5, G5, F5, NO, NO};
+  static u16 au16DurationRight[] = {QN, QN, HN, EN, EN, EN, EN, EN, EN, QN, QN, QN, HN, EN, EN, EN, EN, EN, EN, QN,  HN, HN, EN, EN, EN, EN,  QN, QN, HN, HN, FN};
+  static u16 au16NoteTypeRight[] = {RT, RT, HT, RT, RT, RT, RT, RT, RT, RT, RT, RT, HT, RT, RT, RT, RT, RT, RT, RT,  RT, HT, RT, RT, RT, RT,  RT, RT, RT, HT, HT};
   
+  static u8 u8IndexRight = 0;
+  static u32 u32RightTimer = 0;
+  static u16 u16CurrentDurationRight = 0;
+  static u16 u16NoteSilentDurationRight = 0;
+  static bool bNoteActiveRight = TRUE;
 
-  if (u16Counter == 0) 
-  {
-    u16Counter = U16_COUNTER_PERIOD_MS / divide;
-      static int state = 0;
+  u8 u8CurrentIndex;
 
-  if (state == 0)
+  if(IsTimeUp(&u32RightTimer, (u32)u16CurrentDurationRight))
   {
-    HEARTBEAT_ON();
-    state = 1;
+    u32RightTimer = G_u32SystemTime1ms;
+    u8CurrentIndex = u8IndexRight;
+
+    if(bNoteActiveRight)
+    {
+      if(au16NoteTypeRight[u8CurrentIndex] == RT)
+      {
+        u16CurrentDurationRight = au16DurationRight[u8CurrentIndex] - REGULAR_NOTE_ADJUSTMENT;
+        u16NoteSilentDurationRight = REGULAR_NOTE_ADJUSTMENT;
+        bNoteActiveRight = FALSE;
+      }
+
+      else if(au16NoteTypeRight[u8CurrentIndex] == ST)
+      {
+        u16CurrentDurationRight = STACCATO_NOTE_TIME;
+        u16NoteSilentDurationRight = au16DurationRight[u8CurrentIndex] - STACCATO_NOTE_TIME;
+        bNoteActiveRight = FALSE;
+      }
+
+      else if(au16NoteTypeRight[u8CurrentIndex] == HT)
+      {
+        u16CurrentDurationRight = au16DurationRight[u8CurrentIndex];
+        u16NoteSilentDurationRight = 0;
+        bNoteActiveRight = TRUE;
+
+        u8IndexRight++;
+        if(u8IndexRight == sizeof(au16NotesRight) / sizeof(u16))
+        {
+          u8IndexRight = 0;
+        }
+      }
+
+      if(au16NoteTypeRight[u8CurrentIndex] != NO)
+      {
+        PWMAudioSetFrequency(BUZZER1, au16NotesRight[u8CurrentIndex]);
+        PWMAudioOn(BUZZER1);
+      }
+
+      else 
+      {
+        PWMAudioOff(BUZZER1);
+      }
+    }
+    else
+    {
+      u32RightTimer = G_u32SystemTime1ms;
+        u16CurrentDurationRight = u16NoteSilentDurationRight;
+        bNoteActiveRight = TRUE;
+
+        u8IndexRight++;
+        if(u8IndexRight == sizeof(au16NotesRight) / sizeof(u16))
+        {
+          u8IndexRight = 0;
+      }
+    }
   }
 
-  else if (state == 1)
-  {
-    HEARTBEAT_OFF();
-    state = 0;
-  }
-  divide *= 2;
-  }
 } /* end UserApp1SM_Idle() */
      
 
