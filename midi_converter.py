@@ -1,70 +1,124 @@
 import mido
 import math
+import numpy as np
 
-'''
+
+files = ['overworld.mid', 'underwater.mid', 'overworldz.mid'] # List of all MIDI files to be converted to list format
+
+# ****************************************************************************************************************************
+
+def midi_converter(files):
+    '''
     Designed to convert a MIDI format file into a list of notes (frequencies) and durations in miliseconds
-'''
-Files = [] # List of all MIDI files to be converted to list format
+    '''
+    for filename in files:
+        mid = mido.MidiFile(filename, clip=True)
 
-FileName = 'overworld.mid' # Test File
-mid = mido.MidiFile(FileName, clip=True)
-# print(mid)
+        track_type = mid.type
+        if track_type == 0: # All events merged into a single track, ex. piano
+            print("Track type:", track_type)
 
-# for track in mid.tracks:
-#     print(track)
+        elif track_type == 1: # Multiple tracks are played synchronously. Tempo data is stored in the frist track by convention.
+            print("Track type:", track_type)
+            for msg in mid.tracks[0]:
+                if msg.is_meta:
+                    if msg.type == 'set_tempo':
+                        tempo = msg.tempo
+                    if msg.type == 'time_signature':
+                        ticks_per_beat = msg.clocks_per_click
 
-# for msg in mid.tracks[0]:
-#     print(msg)
+        elif track_type == 2: # Multiple independent tracks
+            print("Track type:", track_type)
 
-track_lists = [] # Track, pitches, lengths
-
-for track in mid.tracks:
-
-    pitches = []
-    lengths = []
-    tempo = 0
-    ticks_per_beat = 0
-    out_of_range = False
-
-    for msg in track:  
-        if msg.is_meta:  # Get tempo and ticks per beat from metadata
-            if msg.type == 'set_tempo':
-                tempo = msg.tempo
-            if msg.type == 'time_signature':
-                ticks_per_beat = msg.clocks_per_click
-            continue
-        if msg.type == 'note_on': # If there is a note, convert it to a frequency and append to the list of notes, else append a zero
-            if msg.note < 48 or msg.note > 95:
-                out_of_range = True
-            pitches.append(math.ceil(440 * 2 ** ((msg.note - 69) / 12)))
-        elif msg.type == 'note_off':
-            pitches.append(0)
-
-        if msg.time == 0:
-            continue
         else:
-            lengths.append(round(mido.tick2second(msg.time, ticks_per_beat, tempo) * 1000)) # Append the duration of the note in ms (rounded to the nearest whole number)
+            print("Invalid track type (Not 0, 1, or 2)")
+
+        track_lists = [] # Track, pitches, lengths
+        max_len = -999
+
+        for track in mid.tracks:
+
+            pitches = [0]
+            lengths = [0]
+
+            if track_type != 1: # Synchronize tempo across tracks for type 1 
+                tempo = 0
+                ticks_per_beat = math.inf
+
+            out_of_range = False
+
+            for msg in track:  
+                if msg.is_meta:  # Get tempo and ticks per beat from metadata
+                    if track_type != 1:
+                        if msg.type == 'set_tempo':
+                            tempo = msg.tempo
+                        if msg.type == 'time_signature':
+                            ticks_per_beat = msg.clocks_per_click
+                    continue
+                if msg.type == 'note_on': # If there is a note, convert it to a frequency and append to the list of notes, else append a zero
+                    if msg.note < 48 or msg.note > 95:
+                        out_of_range = True
+                    pitches.append(math.ceil(440 * 2 ** ((msg.note - 69) / 12)))
+                elif msg.type == 'note_off':
+                    pitches.append(0)
+
+                if msg.time == 0:
+                    continue
+                elif msg.time > 0:
+                    lengths.append(round(mido.tick2second(msg.time, ticks_per_beat, tempo) * 1000)) # Append the duration of the note in ms (rounded to the nearest whole number)
+                else:
+                    print('Might be cooked')
+            
+
+            if out_of_range:
+                print(track, "Warning: Some pitches are out of range")
+
+            lengths.append(0)
+            if len(pitches) != len(lengths):
+                print(track, "Warning: len(pitches) != len(lengths)", len(pitches), 'vs.', len(lengths),)
+            else:
+                print(track, "len(pitches) == len(lengths)", len(pitches), 'vs.', len(lengths),)
+            
+            # if len(lengths) > max_len:
+            #     max_len = len(lengths)
+            
+            # if len(lengths) < max_len:
+                # np.resize(lengths, )
 
 
-    if out_of_range:
-        print("Warning: Some pitches are out of range")
-
-    lengths.append(0)
-    if len(pitches) != len(lengths):
-        print("Warning: len(pitches) != len(lengths),", len(pitches), 'vs.', len(lengths))
-    else:
-        print("len(pitches) == len(lengths)", len(pitches), 'vs.', len(lengths))
-
-    track_lists.append({'Track' : track, 'Pitches' : pitches, 'Lengths' : lengths, 'Duration' : sum(lengths)})
-
-    # print('Pitches:\n')
-    # print(pitches)
-    # print('\nLengths:\n')
-    # print(lengths)
+            track_lists.append({'Track' : track, 'Pitches' : pitches, 'Lengths' : lengths, 'Duration' : sum(lengths)})
 
 
-print(track_lists)
+        [print('\n', i, '\n') for i in track_lists]
 
+# ****************************************************************************************************************************
+
+def track_viewer(filename):
+    mid = mido.MidiFile(filename, clip=True)
+    print(mid)
+    for track in mid.tracks:
+        print(track ,'\n')
+        for msg in track:
+            print(msg)
+# ****************************************************************************************************************************
+
+def read_meta(filename):
+    mid = mido.MidiFile(filename, clip=True)
+    print(mid)
+    for track in mid.tracks:
+        print(track ,'\n')
+        for msg in track:
+            if msg.is_meta:
+                print(msg)
+
+
+# ****************************************************************************************************************************
+
+# track_viewer('overworld.mid')
+# midi_converter(['overworld.mid'])
+read_meta('overworld.mid')
+
+# ****************************************************************************************************************************
 
 # Message('note_on', channel=0, note=60, velocity=64, time=0)
 # Board buzzers allow from C3-B6, corresponding to 48-95 in Midi
