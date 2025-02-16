@@ -3,7 +3,7 @@ import math
 import numpy as np
 
 
-files = ['overworld.mid', 'underwater.mid', 'overworldz.mid'] # List of all MIDI files to be converted to list format
+files = ['overworld.mid', 'underwater.mid', ] # List of all MIDI files to be converted to list format
 
 # ****************************************************************************************************************************
 
@@ -100,6 +100,7 @@ def track_viewer(filename):
         print(track ,'\n')
         for msg in track:
             print(msg)
+
 # ****************************************************************************************************************************
 
 def read_meta(filename):
@@ -114,9 +115,9 @@ def read_meta(filename):
 
 # ****************************************************************************************************************************
 
-# track_viewer('overworld.mid')
-# midi_converter(['overworld.mid'])
-read_meta('overworld.mid')
+# track_viewer('underground.mid')
+midi_converter(['Overworld01.mid'])
+# read_meta('Title 1.mid')
 
 # ****************************************************************************************************************************
 
