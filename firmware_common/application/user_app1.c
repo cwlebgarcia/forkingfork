@@ -143,13 +143,13 @@ State Machine Function Definitions
 /* What does this state do? */
 static void UserApp1SM_Idle(void)
 {
-  static u16 au16NotesRight[] = {F5, F5, F5, F5, F5, E5, D5, E5, F5, G5, A5, A5, A5, A5, A5, G5, F5, G5, A5, A5S, C6, F5, F5, D6, C6, A5S, A5, G5, F5, NO, NO};
-  static u16 au16DurationRight[] = {QN, QN, HN, EN, EN, EN, EN, EN, EN, QN, QN, QN, HN, EN, EN, EN, EN, EN, EN, QN,  HN, HN, EN, EN, EN, EN,  QN, QN, HN, HN, FN};
-  static u16 au16NoteTypeRight[] = {RT, RT, HT, RT, RT, RT, RT, RT, RT, RT, RT, RT, HT, RT, RT, RT, RT, RT, RT, RT,  RT, HT, RT, RT, RT, RT,  RT, RT, RT, HT, HT};
+  static u16 au16NotesRight[] = {0, 660, 0, 660, 0, 524, 0, 660, 0, 784, 0, 524, 0, 392, 0, 330, 0, 440, 0, 494, 0, 467, 0, 440, 0, 392, 0, 660, 0, 784, 0, 880, 0, 699, 0, 784, 0, 660, 0, 524, 0, 588, 0, 494, 0, 524, 0, 392, 0, 330, 0, 440, 0, 494, 0, 467, 0, 440, 0, 392, 0, 660, 0, 784, 0, 880, 0, 699, 0, 784, 0, 660, 0, 524, 0, 588, 0, 494, 0, 784, 0, 740, 0, 699, 0, 623, 0, 660, 0, 416, 0, 440, 0, 524, 0, 440, 0, 524, 0, 588, 0, 784, 0, 740, 0, 699, 0, 623, 0, 660, 0, 1047, 0, 1047, 0, 1047, 0, 784, 0, 740, 0, 699, 0, 623, 0, 660, 0, 416, 0, 440, 0, 524, 0, 440, 0, 524, 0, 588, 0, 623, 0, 588, 0, 524, 0, 784, 0, 740, 0, 699, 0, 623, 0, 660, 0, 416, 0, 440, 0, 524, 0, 440, 0, 524, 0, 588, 0, 784, 0, 740, 0, 699, 0, 623, 0, 660, 0, 1047, 0, 1047, 0, 1047, 0, 784, 0, 740, 0, 699, 0, 623, 0, 660, 0, 416, 0, 440, 0, 524, 0, 440, 0, 524, 0, 588, 0, 623, 0, 588, 0, 524, 0, 524, 0, 524, 0, 524, 0, 524, 0, 588, 0, 660, 0, 524, 0, 440, 0, 392, 0, 524, 0, 524, 0, 524, 0, 524, 0, 588, 0, 660, 0, 524, 0, 524, 0, 524, 0, 524, 0, 588, 0, 660, 0, 524, 0, 440, 0, 392, 0, 660, 0, 660, 0, 660, 0, 524, 0, 660, 0, 784, 0, 524, 0, 392, 0, 330, 0, 440, 0, 494, 0, 467, 0, 440, 0, 392, 0, 660, 0, 784, 0, 880, 0, 699, 0, 784, 0, 660, 0, 524, 0, 588, 0, 494, 0, 524, 0, 392, 0, 330, 0, 440, 0, 494, 0, 467, 0, 440, 0, 392, 0, 660, 0, 784, 0, 880, 0, 699, 0, 784, 0, 660, 0, 524, 0, 588, 0, 494, 0, 660, 0, 524, 0, 392, 0, 416, 0, 440, 0, 699, 0, 699, 0, 440, 0, 494, 0, 880, 0, 880, 0, 880, 0, 784, 0, 699, 0, 660, 0, 524, 0, 440, 0, 392, 0, 660, 0, 524, 0, 392, 0, 416, 0, 440, 0, 699, 0, 699, 0, 440, 0, 494, 0, 699, 0, 699, 0, 699, 0, 660, 0, 588, 0, 524, 0, 660, 0, 524, 0, 392, 0, 416, 0, 440, 0, 699, 0, 699, 0, 440, 0, 494, 0, 880, 0, 880, 0, 880, 0, 784, 0, 699, 0, 660, 0, 524, 0, 440, 0, 392, 0, 660, 0, 524, 0, 392, 0, 416, 0, 440, 0, 699, 0, 699, 0, 440, 0, 494, 0, 699, 0, 699, 0, 699, 0, 660, 0, 588, 0, 524, 0, 524, 0, 524, 0, 524, 0, 524, 0, 588, 0, 660, 0, 524, 0, 440, 0, 392, 0, 524, 0, 524, 0, 524, 0, 524, 0, 588, 0, 660, 0, 524, 0, 524, 0, 524, 0, 524, 0, 588, 0, 660, 0, 524, 0, 440, 0, 392, 0, 660, 0, 660, 0, 660, 0, 524, 0, 660, 0, 784, 0, 660, 0, 524, 0, 392, 0, 416, 0, 440, 0, 699, 0, 699, 0, 440, 0, 494, 0, 880, 0, 880, 0, 880, 0, 784, 0, 699, 0, 660, 0, 524, 0, 440, 0, 392, 0, 660, 0, 524, 0, 392, 0, 416, 0, 440, 0, 699, 0, 699, 0, 440, 0, 494, 0, 699, 0, 699, 0, 699, 0, 660, 0, 588, 0, 524, 0};
+  static u16 au16DurationRight[] = {95, 48, 95, 190, 95, 190, 95, 48, 95, 190, 95, 1048, 95, 333, 95, 333, 95, 333, 95, 190, 95, 190, 95, 48, 95, 190, 95, 95, 95, 95, 95, 95, 95, 190, 95, 48, 95, 190, 95, 190, 95, 48, 95, 48, 95, 333, 95, 333, 95, 333, 95, 333, 95, 190, 95, 190, 95, 48, 95, 190, 95, 95, 95, 95, 95, 95, 95, 190, 95, 48, 95, 190, 95, 190, 95, 48, 95, 48, 95, 619, 95, 48, 95, 48, 95, 48, 95, 190, 95, 190, 95, 48, 95, 48, 95, 190, 95, 48, 95, 48, 95, 333, 95, 48, 95, 48, 95, 48, 95, 190, 95, 190, 95, 190, 95, 48, 95, 762, 95, 48, 95, 48, 95, 48, 95, 190, 95, 190, 95, 48, 95, 48, 95, 190, 95, 48, 95, 48, 95, 333, 95, 333, 95, 333, 95, 1333, 95, 48, 95, 48, 95, 48, 95, 190, 95, 190, 95, 48, 95, 48, 95, 190, 95, 48, 95, 48, 95, 333, 95, 48, 95, 48, 95, 48, 95, 190, 95, 190, 95, 190, 95, 48, 95, 762, 95, 48, 95, 48, 95, 48, 95, 190, 95, 190, 95, 48, 95, 48, 95, 190, 95, 48, 95, 48, 95, 333, 95, 333, 95, 333, 95, 1048, 95, 48, 95, 190, 95, 190, 95, 48, 95, 190, 95, 48, 95, 190, 95, 48, 95, 476, 95, 48, 95, 190, 95, 190, 95, 48, 95, 48, 95, 1190, 95, 48, 95, 190, 95, 190, 95, 48, 95, 190, 95, 48, 95, 190, 95, 48, 95, 476, 95, 48, 95, 190, 95, 190, 95, 48, 95, 190, 95, 1048, 95, 333, 95, 333, 95, 333, 95, 190, 95, 190, 95, 48, 95, 190, 95, 95, 95, 95, 95, 95, 95, 190, 95, 48, 95, 190, 95, 190, 95, 48, 95, 48, 95, 333, 95, 333, 95, 333, 95, 333, 95, 190, 95, 190, 95, 48, 95, 190, 95, 95, 95, 95, 95, 95, 95, 190, 95, 48, 95, 190, 95, 190, 95, 48, 95, 48, 95, 333, 95, 48, 95, 190, 95, 333, 95, 190, 95, 48, 95, 190, 95, 48, 95, 476, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 48, 95, 190, 95, 48, 95, 476, 95, 48, 95, 190, 95, 333, 95, 190, 95, 48, 95, 190, 95, 48, 95, 476, 95, 48, 95, 190, 95, 48, 95, 95, 95, 95, 95, 95, 95, 1048, 95, 48, 95, 190, 95, 333, 95, 190, 95, 48, 95, 190, 95, 48, 95, 476, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 48, 95, 190, 95, 48, 95, 476, 95, 48, 95, 190, 95, 333, 95, 190, 95, 48, 95, 190, 95, 48, 95, 476, 95, 48, 95, 190, 95, 48, 95, 95, 95, 95, 95, 95, 95, 1048, 95, 48, 95, 190, 95, 190, 95, 48, 95, 190, 95, 48, 95, 190, 95, 48, 95, 476, 95, 48, 95, 190, 95, 190, 95, 48, 95, 48, 95, 1190, 95, 48, 95, 190, 95, 190, 95, 48, 95, 190, 95, 48, 95, 190, 95, 48, 95, 476, 95, 48, 95, 190, 95, 190, 95, 48, 95, 190, 95, 1048, 95, 48, 95, 190, 95, 333, 95, 190, 95, 48, 95, 190, 95, 48, 95, 476, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 48, 95, 190, 95, 48, 95, 476, 95, 48, 95, 190, 95, 333, 95, 190, 95, 48, 95, 190, 95, 48, 95, 476, 95, 48, 95, 190, 95, 48, 95, 95, 95, 95, 95, 95, 9};
+  // static u16 au16NoteTypeRight[] = {RT, RT, HT, RT, RT, RT, RT, RT, RT, RT, RT, RT, HT, RT, RT, RT, RT, RT, RT, RT,  RT, HT, RT, RT, RT, RT,  RT, RT, RT, HT, HT};
  
-  static u16 au16NotesLeft[] = {F4, F4, A4, A4, D4, D4, F4, F4, A3S, A3S, D4, D4, C4, C4, E4, E4};
-  static u16 au16DurationLeft[] = {EN, EN, EN, EN, EN, EN, EN, EN, EN,  EN,  EN, EN, EN, EN, EN, EN};
-  static u16 au16NoteTypeLeft[] = {RT, RT, RT, RT, RT, RT, RT, RT, RT,  RT,  RT, RT, RT, RT, RT, RT};
+  // static u16 au16NotesLeft[] = {F4, F4, A4, A4, D4, D4, F4, F4, A3S, A3S, D4, D4, C4, C4, E4, E4};
+  // static u16 au16DurationLeft[] = {EN, EN, EN, EN, EN, EN, EN, EN, EN,  EN,  EN, EN, EN, EN, EN, EN};
+  // static u16 au16NoteTypeLeft[] = {RT, RT, RT, RT, RT, RT, RT, RT, RT,  RT,  RT, RT, RT, RT, RT, RT};
 
   static u8 u8IndexRight = 0;
   static u32 u32RightTimer = 0;
@@ -157,11 +157,11 @@ static void UserApp1SM_Idle(void)
   static u16 u16NoteSilentDurationRight = 0;
   static bool bNoteActiveRight = TRUE;
 
-  static u8 u8IndexLeft = 0;
-  static u32 u32LeftTimer = 0;
-  static u16 u16CurrentDurationLeft = 0;
-  static u16 u16NoteSilentDurationLeft = 0;
-  static bool bNoteActiveLeft = TRUE;
+  // static u8 u8IndexLeft = 0;
+  // static u32 u32LeftTimer = 0;
+  // static u16 u16CurrentDurationLeft = 0;
+  // static u16 u16NoteSilentDurationLeft = 0;
+  // static bool bNoteActiveLeft = TRUE;
 
   u8 u8CurrentIndex;
 
@@ -172,22 +172,22 @@ static void UserApp1SM_Idle(void)
 
     if(bNoteActiveRight)
     {
-      if(au16NoteTypeRight[u8CurrentIndex] == RT)
-      {
-        u16CurrentDurationRight = au16DurationRight[u8CurrentIndex] - REGULAR_NOTE_ADJUSTMENT;
-        u16NoteSilentDurationRight = REGULAR_NOTE_ADJUSTMENT;
-        bNoteActiveRight = FALSE;
-      }
+      // if(au16NoteTypeRight[u8CurrentIndex] == RT)
+      // {
+      //   u16CurrentDurationRight = au16DurationRight[u8CurrentIndex] - REGULAR_NOTE_ADJUSTMENT;
+      //   u16NoteSilentDurationRight = REGULAR_NOTE_ADJUSTMENT;
+      //   bNoteActiveRight = FALSE;
+      // }
 
-      else if(au16NoteTypeRight[u8CurrentIndex] == ST)
-      {
-        u16CurrentDurationRight = STACCATO_NOTE_TIME;
-        u16NoteSilentDurationRight = au16DurationRight[u8CurrentIndex] - STACCATO_NOTE_TIME;
-        bNoteActiveRight = FALSE;
-      }
+      // else if(au16NoteTypeRight[u8CurrentIndex] == ST)
+      // {
+      //   u16CurrentDurationRight = STACCATO_NOTE_TIME;
+      //   u16NoteSilentDurationRight = au16DurationRight[u8CurrentIndex] - STACCATO_NOTE_TIME;
+      //   bNoteActiveRight = FALSE;
+      // }
 
-      else if(au16NoteTypeRight[u8CurrentIndex] == HT)
-      {
+      // else if(au16NoteTypeRight[u8CurrentIndex] == HT)
+      // {
         u16CurrentDurationRight = au16DurationRight[u8CurrentIndex];
         u16NoteSilentDurationRight = 0;
         bNoteActiveRight = TRUE;
@@ -197,18 +197,18 @@ static void UserApp1SM_Idle(void)
         {
           u8IndexRight = 0;
         }
-      }
+      // }
 
-      if(au16NoteTypeRight[u8CurrentIndex] != NO)
-      {
+      // if(au16NoteTypeRight[u8CurrentIndex] != NO)
+      // {
         PWMAudioSetFrequency(BUZZER1, au16NotesRight[u8CurrentIndex]);
         PWMAudioOn(BUZZER1);
-      }
+      // }
 
-      else 
-      {
-        PWMAudioOff(BUZZER1);
-      }
+      // else 
+      // {
+      //   PWMAudioOff(BUZZER1);
+      // }
     }
     else
     {
@@ -224,66 +224,66 @@ static void UserApp1SM_Idle(void)
     }
   }
 
-if(IsTimeUp(&u32LeftTimer, (u32)u16CurrentDurationLeft))
-{
-  u32LeftTimer = G_u32SystemTime1ms;
-  u8CurrentIndex = u8IndexLeft;
+// if(IsTimeUp(&u32LeftTimer, (u32)u16CurrentDurationLeft))
+// {
+//   u32LeftTimer = G_u32SystemTime1ms;
+//   u8CurrentIndex = u8IndexLeft;
 
-  if(bNoteActiveLeft)
-  {
-    if(au16NoteTypeLeft[u8CurrentIndex] == RT)
-    {
-      u16CurrentDurationLeft = au16DurationLeft[u8CurrentIndex] - REGULAR_NOTE_ADJUSTMENT;
-      u16NoteSilentDurationLeft = REGULAR_NOTE_ADJUSTMENT;
-      bNoteActiveLeft = FALSE;
-    }
+//   if(bNoteActiveLeft)
+//   {
+//     // if(au16NoteTypeLeft[u8CurrentIndex] == RT)
+//     // {
+//     //   u16CurrentDurationLeft = au16DurationLeft[u8CurrentIndex] - REGULAR_NOTE_ADJUSTMENT;
+//     //   u16NoteSilentDurationLeft = REGULAR_NOTE_ADJUSTMENT;
+//     //   bNoteActiveLeft = FALSE;
+//     // }
 
-    else if(au16NoteTypeLeft[u8CurrentIndex] == ST)
-    {
-      u16CurrentDurationLeft = STACCATO_NOTE_TIME;
-      u16NoteSilentDurationLeft = au16DurationLeft[u8CurrentIndex] - STACCATO_NOTE_TIME;
-      bNoteActiveLeft = FALSE;
-    }
+//     // else if(au16NoteTypeLeft[u8CurrentIndex] == ST)
+//     // {
+//     //   u16CurrentDurationLeft = STACCATO_NOTE_TIME;
+//     //   u16NoteSilentDurationLeft = au16DurationLeft[u8CurrentIndex] - STACCATO_NOTE_TIME;
+//     //   bNoteActiveLeft = FALSE;
+//     // }
 
-    else if(au16NoteTypeLeft[u8CurrentIndex] == HT)
-    {
-      u16CurrentDurationLeft = au16DurationLeft[u8CurrentIndex];
-      u16NoteSilentDurationLeft = 0;
-      bNoteActiveLeft = TRUE;
+//     // else if(au16NoteTypeLeft[u8CurrentIndex] == HT)
+//     // {
+//       u16CurrentDurationLeft = au16DurationLeft[u8CurrentIndex];
+//       u16NoteSilentDurationLeft = 0;
+//       bNoteActiveLeft = TRUE;
 
-      u8IndexLeft++;
-      if(u8IndexLeft == sizeof(au16NotesLeft) / sizeof(u16))
-      {
-        u8IndexLeft = 0;
-      }
-    }
+//       u8IndexLeft++;
+//       if(u8IndexLeft == sizeof(au16NotesLeft) / sizeof(u16))
+//       {
+//         u8IndexLeft = 0;
+//       }
+//     // }
 
-    if(au16NoteTypeLeft[u8CurrentIndex] != NO)
-    {
-      PWMAudioSetFrequency(BUZZER2, au16NotesLeft[u8CurrentIndex]);
-      PWMAudioOn(BUZZER2);
-    }
+//     if(au16NoteTypeLeft[u8CurrentIndex] != NO)
+//     {
+//       PWMAudioSetFrequency(BUZZER2, au16NotesLeft[u8CurrentIndex]);
+//       PWMAudioOn(BUZZER2);
+//     }
 
-    else 
-    {
-      PWMAudioOff(BUZZER2);
-    }
-  }
+//     else 
+//     {
+//       PWMAudioOff(BUZZER2);
+//     }
+//   }
 
-  else
-  {
-    PWMAudioOff(BUZZER2);
-    u32LeftTimer = G_u32SystemTime1ms;
-    u16CurrentDurationLeft = u16NoteSilentDurationLeft;
-    bNoteActiveLeft = TRUE;
+//   else
+//   {
+//     PWMAudioOff(BUZZER2);
+//     u32LeftTimer = G_u32SystemTime1ms;
+//     u16CurrentDurationLeft = u16NoteSilentDurationLeft;
+//     bNoteActiveLeft = TRUE;
 
-    u8IndexLeft++;
-    if(u8IndexLeft == sizeof(au16NotesLeft) / sizeof(u16))
-    {
-      u8IndexLeft = 0;
-    }
-  }
-}
+//     u8IndexLeft++;
+//     if(u8IndexLeft == sizeof(au16NotesLeft) / sizeof(u16))
+//     {
+//       u8IndexLeft = 0;
+//     }
+//   }
+// }
 
 } /* end UserApp1SM_Idle() */
      
