@@ -190,7 +190,8 @@ static void UserApp1SM_Idle(void)
         u16NoteSilentDurationRight = 0;
         bNoteActiveRight = TRUE;
         
-        u8IndexRight++;
+        if(u8IndexRight < sizeof(au16NotesRight) / sizeof(u16))
+          u8IndexRight++;
         // if(u8IndexRight == sizeof(au16NotesRight) / sizeof(u16))
         // {
         //   u8IndexRight = 0;
@@ -220,7 +221,7 @@ static void UserApp1SM_Idle(void)
       bNoteActiveRight = TRUE;
 
       u8IndexRight++;
-      if(u8IndexRight == sizeof(au16NotesRight) / sizeof(u16))
+      if(u8IndexRight < sizeof(au16NotesRight) / sizeof(u16))
       {
           u8IndexRight = 0;
       }
@@ -253,8 +254,8 @@ if(IsTimeUp(&u32LeftTimer, (u32)u16CurrentDurationLeft))
       u16CurrentDurationLeft = au16DurationLeft[u8CurrentIndex];
       u16NoteSilentDurationLeft = 0;
       bNoteActiveLeft = TRUE;
-
-      u8IndexLeft++;
+      if(u8IndexLeft < sizeof(au16NotesLeft) / sizeof(u16))
+        u8IndexLeft++;
       if(u8IndexLeft == sizeof(au16NotesLeft) / sizeof(u16) && u8IndexRight == sizeof(au16NotesRight) / sizeof(u16))
       {
         u8IndexLeft = 0;
