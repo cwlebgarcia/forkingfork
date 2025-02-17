@@ -143,6 +143,43 @@ State Machine Function Definitions
 /* What does this state do? */
 static void UserApp1SM_Idle(void)
 {
+  u32 current_song_index; // Used to index the song list
+  u32 num_of_songs; // Number of tracks loaded onto the board/SD Card
+  
+
+  if(IsButtonPressed(BUTTON0)) // Play Current Track; Current Title Displayed. Press again to cease current song.
+  {
+    ButtonAcknowledge(BUTTON0);
+  }
+
+  if(IsButtonPressed(BUTTON1)) // Play Shuffle. Press again to cease shuffle/current song.
+  {
+    ButtonAcknowledge(BUTTON1);
+
+    current_song_index = G_u32SystemTime1ms % num_of_songs;
+    
+  }
+
+  if(IsButtonPressed(BUTTON2)) // Scroll Right
+  {
+    ButtonAcknowledge(BUTTON2);
+
+    if(current_song_index > 0)
+      current_song_index++;
+
+  }
+
+  if(IsButtonPressed(BUTTON3)) // Scroll Left
+  {
+    ButtonAcknowledge(BUTTON3);
+
+    if (current_song_index < num_of_songs)
+      current_song_index--;
+
+  }
+
+
+
   static u16 au16NotesRight[] =    {0, 467, 0, 467, 0, 467, 0, 467, 0, 467, 0, 467, 0, 416, 0, 467, 0, 467, 0, 467, 0, 467, 0, 467, 0, 467, 0, 416, 0, 467, 0, 467, 0, 467, 0, 467, 0, 467, 0, 467, 0, 350, 0, 350, 0, 350, 0, 350, 0, 350, 0, 350, 0, 350, 0, 350, 0, 350, 0, 350, 0, 467, 0, 350, 0, 467, 0, 467, 0, 524, 0, 588, 0, 623, 0, 699, 0, 699, 0, 699, 0, 740, 0, 831, 0, 933, 0, 933, 0, 933, 0, 933, 0, 831, 0, 740, 0, 831, 0, 740, 0, 699, 0, 699, 0, 623, 0, 623, 0, 699, 0, 740, 0, 699, 0, 623, 0, 555, 0, 555, 0, 623, 0, 699, 0, 623, 0, 555, 0, 524, 0, 524, 0, 588, 0, 660, 0, 784, 0, 699, 0, 350, 0, 350, 0, 350, 0, 350, 0, 350, 0, 350, 0, 350, 0, 350, 0, 350, 0, 350, 0, 467, 0, 350, 0, 467, 0, 467, 0, 524, 0, 588, 0, 623, 0, 699, 0, 699, 0, 699, 0, 740, 0, 831, 0, 933, 0, 1109, 0, 1047, 0, 880, 0, 699, 0, 740, 0, 933, 0, 880, 0, 699, 0, 699, 0, 740, 0, 933, 0, 880, 0, 699, 0, 588, 0, 623, 0, 740, 0, 699, 0, 555, 0, 467, 0, 524, 0, 524, 0, 588, 0, 660, 0, 784, 0, 699, 0, 350, 0, 350, 0, 350, 0, 350, 0, 350, 0, 350, 0, 350, 0, 350, 0, 350, 0, 350, 0};
   static u16 au16DurationRight[] = {0, 3243, 1081, 355, 186, 355, 186, 355, 186, 355, 186, 524, 557, 355, 186, 2162, 541, 355, 186, 355, 186, 355, 186, 355, 186, 524, 557, 355, 186, 2416, 287, 355, 186, 355, 186, 355, 186, 355, 186, 541, 270, 270, 135, 270, 135, 541, 270, 270, 135, 270, 135, 541, 270, 270, 135, 270, 135, 541, 270, 541, 270, 1081, 541, 2416, 422, 389, 17, 389, 17, 389, 17, 389, 17, 389, 17, 3226, 828, 541, 270, 524, 17, 524, 17, 524, 17, 3767, 17, 524, 17, 524, 17, 524, 17, 524, 17, 524, 17, 524, 557, 524, 17, 3226, 17, 1605, 17, 794, 17, 389, 17, 389, 17, 3226, 17, 794, 17, 794, 17, 794, 17, 389, 17, 389, 17, 3226, 17, 794, 17, 794, 17, 794, 17, 389, 17, 389, 17, 3226, 17, 1605, 17, 541, 270, 270, 135, 270, 135, 541, 270, 270, 135, 270, 135, 541, 270, 270, 135, 270, 135, 541, 270, 541, 270, 1081, 541, 2416, 422, 389, 17, 389, 17, 389, 17, 389, 17, 389, 17, 3226, 828, 541, 270, 524, 17, 524, 17, 524, 17, 4848, 17, 1605, 17, 811, 811, 2703, 541, 1605, 17, 3514, 1351, 1605, 17, 811, 811, 2703, 541, 1605, 17, 3226, 1639, 1605, 17, 794, 828, 3226, 17, 1605, 17, 3226, 1639, 1605, 17, 794, 828, 3226, 17, 1605, 17, 794, 17, 389, 17, 389, 17, 3226, 17, 1605, 17, 541, 270, 270, 135, 270, 135, 541, 270, 270, 135, 270, 135, 541, 270, 270, 135, 270, 135, 541, 270, 541, 0};
  
@@ -152,14 +189,10 @@ static void UserApp1SM_Idle(void)
   static u32 u32IndexRight = 0;
   static u32 u32RightTimer = 0;
   static u16 u16CurrentDurationRight = 0;
-  // static u16 u16NoteSilentDurationRight = 0;
-  // static bool bNoteActiveRight = TRUE;
 
   static u32 u32IndexLeft = 0;
   static u32 u32LeftTimer = 0;
   static u16 u16CurrentDurationLeft = 0;
-  // static u16 u16NoteSilentDurationLeft = 0;
-  // static bool bNoteActiveLeft = TRUE;
 
   u32 u32CurrentIndex;
 
@@ -168,95 +201,42 @@ static void UserApp1SM_Idle(void)
     u32RightTimer = G_u32SystemTime1ms;
     u32CurrentIndex = u32IndexRight;
 
-    // if(bNoteActiveRight)
-    // {
-        u16CurrentDurationRight = au16DurationRight[u32CurrentIndex];
-        // u16NoteSilentDurationRight = 0;
-        // bNoteActiveRight = TRUE;
+    u16CurrentDurationRight = au16DurationRight[u32CurrentIndex];
         
-        if(u32IndexRight < sizeof(au16NotesRight) / sizeof(u16))
-          u32IndexRight++;
-        // if(u8IndexRight == sizeof(au16NotesRight) / sizeof(u16))
-        // {
-        //   u8IndexRight = 0;
-        // }
-        if(au16NotesRight[u32CurrentIndex] != 0)
-        {
-          PWMAudioSetFrequency(BUZZER1, au16NotesRight[u32CurrentIndex]);
-          PWMAudioOn(BUZZER1);
-        }
-        else
-        {
-          PWMAudioOff(BUZZER1);
-        }
+    if(u32IndexRight < sizeof(au16NotesRight) / sizeof(u16))
+      u32IndexRight++;
 
-        // if(u8IndexRight == sizeof(au16NotesRight) / sizeof(u16) && u8IndexLeft == sizeof(au16NotesLeft) / sizeof(u16))
-        // {
-        //     u8IndexRight = 0;
-        //     u8IndexLeft = 0;
-        // }
-    // }
-    // else
-    // {
-    //   u32RightTimer = G_u32SystemTime1ms;
-    //   u16CurrentDurationRight = u16NoteSilentDurationRight;
-    //   // bNoteActiveRight = TRUE;
-
-    //   if(u8IndexRight < sizeof(au16NotesRight) / sizeof(u16))
-    //     u8IndexRight++;
-    //   // if(u8IndexRight == sizeof(au16NotesRight) / sizeof(u16) && u8IndexLeft == sizeof(au16NotesLeft) / sizeof(u16))
-    //   // {
-    //   //     u8IndexRight = 0;
-    //   //     u8IndexLeft = 0;
-    //   // }
-    // }
+    if(au16NotesRight[u32CurrentIndex] != 0)
+    {
+      PWMAudioSetFrequency(BUZZER1, au16NotesRight[u32CurrentIndex]);
+      PWMAudioOn(BUZZER1);
+    }
+    else
+    {
+      PWMAudioOff(BUZZER1);
+    }
   }
 
-if(IsTimeUp(&u32LeftTimer, (u32)u16CurrentDurationLeft))
-{
-  u32LeftTimer = G_u32SystemTime1ms;
-  u32CurrentIndex = u32IndexLeft;
+  if(IsTimeUp(&u32LeftTimer, (u32)u16CurrentDurationLeft))
+  {
+    u32LeftTimer = G_u32SystemTime1ms;
+   u32CurrentIndex = u32IndexLeft;
 
-  // if(bNoteActiveLeft)
-  // {
-      u16CurrentDurationLeft = au16DurationLeft[u32CurrentIndex];
-      // u16NoteSilentDurationLeft = 0;
-      // bNoteActiveLeft = TRUE;
+    u16CurrentDurationLeft = au16DurationLeft[u32CurrentIndex];
 
-      if(u32IndexLeft < sizeof(au16NotesLeft) / sizeof(u16))
-        u32IndexLeft++;
-      // if(u8IndexLeft == sizeof(au16NotesLeft) / sizeof(u16) && u8IndexRight == sizeof(au16NotesRight) / sizeof(u16))
-      // {
-      //   u8IndexLeft = 0;
-      //   u8IndexRight = 0;
-      // }
-      if(au16NotesRight[u32CurrentIndex] != 0)
-      {
-        PWMAudioSetFrequency(BUZZER2, au16NotesLeft[u32CurrentIndex]);
-        PWMAudioOn(BUZZER2);
-      }
-      else
-      {
-        PWMAudioOff(BUZZER2);
-      }
+    if(u32IndexLeft < sizeof(au16NotesLeft) / sizeof(u16))
+      u32IndexLeft++;
 
-  // }
-
-  // else
-  // {
-  //   u32LeftTimer = G_u32SystemTime1ms;
-  //   u16CurrentDurationLeft = u16NoteSilentDurationLeft;
-  //   // bNoteActiveLeft = TRUE;
-  //   if(u8IndexLeft < sizeof(au16NotesLeft) / sizeof(u16))
-  //     u8IndexLeft++;
-  //   // if(u8IndexLeft == sizeof(au16NotesLeft) / sizeof(u16) && u8IndexRight == sizeof(au16NotesRight) / sizeof(u16))
-  //   // {
-  //   //   u8IndexLeft = 0;
-  //   //   u8IndexRight = 0;
-  //   // }
-  // }
-}
-
+    if(au16NotesRight[u32CurrentIndex] != 0)
+    {
+      PWMAudioSetFrequency(BUZZER2, au16NotesLeft[u32CurrentIndex]);
+      PWMAudioOn(BUZZER2);
+    }
+    else
+    {
+      PWMAudioOff(BUZZER2);
+    }
+  }
 } /* end UserApp1SM_Idle() */
      
 
