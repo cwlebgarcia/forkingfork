@@ -55,12 +55,17 @@ def midi_converter(files):
                         if msg.type == 'time_signature':
                             ticks_per_beat = msg.clocks_per_click
                     continue
-                if msg.type == 'note_on': # If there is a note, convert it to a frequency and append to the list of notes, else append a zero
+                
+                if msg.type == 'note_off' : 
+                    pitches.append(0)
+                elif msg.type == 'note_on': # If there is a note, convert it to a frequency and append to the list of notes, else append a zero
+                    if msg.velocity == 0:
+                        pitches.append(0)
+                    else:
+                        pitches.append(math.ceil(440 * 2 ** ((msg.note - 69) / 12)))
                     if msg.note < 48 or msg.note > 95:
                         out_of_range = True
-                    pitches.append(math.ceil(440 * 2 ** ((msg.note - 69) / 12)))
-                elif msg.type == 'note_off':
-                    pitches.append(0)
+                    
 
                 if msg.time == 0:
                     continue
@@ -115,9 +120,13 @@ def read_meta(filename):
 
 # ****************************************************************************************************************************
 
-# track_viewer('underground.mid')
-midi_converter(['Overworld01.mid'])
-# read_meta('Title 1.mid')
+track_viewer('Wii Channels - Mii Channel.mid')
+# midi_converter(['Wii Channels - Mii Channel.mid'])
+read_meta('Wii Channels - Mii Channel.mid')
+
+# track_viewer('overworld.mid')
+# midi_converter(['overworld.mid'])
+# read_meta('overworld.mid')
 
 # ****************************************************************************************************************************
 
