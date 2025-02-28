@@ -1,7 +1,5 @@
 import mido
 import math
-import numpy as np
-
 
 files = ['overworld.mid', 'underwater.mid', ] # List of all MIDI files to be converted to list format
 
@@ -75,27 +73,23 @@ def midi_converter(files):
                     print('Might be cooked')
             
 
-            if out_of_range:
-                print(track, "Warning: Some pitches are out of range")
+            # if out_of_range:
+            #     print(track, "Warning: Some pitches are out of range")
 
-            lengths.append(0)
-            if len(pitches) != len(lengths):
-                print(track, "Warning: len(pitches) != len(lengths)", len(pitches), 'vs.', len(lengths),)
-            else:
-                print(track, "len(pitches) == len(lengths)", len(pitches), 'vs.', len(lengths),)
+            # lengths.append(0)
+            # if len(pitches) != len(lengths):
+            #     print(track, "Warning: len(pitches) != len(lengths)", len(pitches), 'vs.', len(lengths),)
+            # else:
+            #     print(track, "len(pitches) == len(lengths)", len(pitches), 'vs.', len(lengths),)
             
-            # if len(lengths) > max_len:
-            #     max_len = len(lengths)
-            
-            # if len(lengths) < max_len:
-                # np.resize(lengths, )
-
-
-            track_lists.append({'Track' : track, 'Pitches' : pitches, 'Lengths' : lengths, 'Duration' : sum(lengths)})
+            track_lists.append({'Track' : track.name, 'Pitches' : pitches, 'Lengths' : lengths})
 
 
         [print('\n', i, '\n') for i in track_lists]
+        # print(track_lists)
+        # file_maker(track_lists)
 
+# ****************************************************************************************************************************
 # ****************************************************************************************************************************
 
 def track_viewer(filename):
@@ -120,12 +114,12 @@ def read_meta(filename):
 
 # ****************************************************************************************************************************
 
-track_viewer('Wii Channels - Mii Channel.mid')
-# midi_converter(['Wii Channels - Mii Channel.mid'])
-read_meta('Wii Channels - Mii Channel.mid')
+# track_viewer('Wii Channels - Mii Channel.mid')
+# midi_converter(['underwater.mid'])
+# read_meta('Wii Channels - Mii Channel.mid')
 
 # track_viewer('overworld.mid')
-# midi_converter(['overworld.mid'])
+midi_converter(files)
 # read_meta('overworld.mid')
 
 # ****************************************************************************************************************************

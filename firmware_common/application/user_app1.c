@@ -94,8 +94,9 @@ void UserApp1Initialize(void)
 {
   HEARTBEAT_OFF();
 
-
   LcdCommand(LCD_CLEAR_CMD);
+
+
 
   LcdMessage(LINE2_START_ADDR, ">");
   LcdMessage(LINE2_START_ADDR + 6, "$");
@@ -149,75 +150,89 @@ void UserApp1RunActiveState(void)
 State Machine Function Definitions
 **********************************************************************************************************************/
 /*-------------------------------------------------------------------------------------------------------------------*/
-/* What does this state do? */
+/* Jukebox Interface*/
 static void UserApp1SM_Idle(void)
 {
-  u32 current_song_index = 0; // Used to index the song list
-  u32 num_of_songs; // Number of tracks loaded onto the board/SD Card
-  
+//   static u32 current_song_index = 0; // Used to index the song list
+//   static u32 num_of_songs; // Number of tracks loaded onto the board/SD Card
+//   static bool playing; //  Tell us whether or not a song is currently playing
+//   static bool shuffling; // Whether or not the shuffle mode is currently enabled
+//   static bool shuffle_play; // Shuffle play state
 
-  if(IsButtonPressed(BUTTON0)) // Play Current Track; Current Title Displayed. Press again to cease current song. Just the left arrow, perhaps a custom play button if I get to it
-  {
-    ButtonAcknowledge(BUTTON0);
-  }
+//   LcdMessage(LINE1_START_ADDR, current_song_index);
 
-  if(IsButtonPressed(BUTTON1)) // Play Shuffle. Press again to cease shuffle/current song.
-  {
-    ButtonAcknowledge(BUTTON1);
+//   if(IsButtonPressed(BUTTON0)) // Play Current Track; Current Title Displayed. Press again to cease current song. Just the left arrow, perhaps a custom play button if I get to it
+//   {
+//     ButtonAcknowledge(BUTTON0);
 
-    current_song_index = G_u32SystemTime1ms % num_of_songs;
+//     if (!playing)
+//       playing = TRUE;
+//     else
+//       playing = FALSE;
     
-  }
+//     if (playing)
+//     {
+//       Jukebox(current_song_index); // Doesn't work yet
+//     }
+//   }
 
-  if(IsButtonPressed(BUTTON2)) // Scroll Left. Symbol Left arrow on ASCII
-  {
-    ButtonAcknowledge(BUTTON2);
+//   if(IsButtonPressed(BUTTON1)) // Play Shuffle. Press again to cease shuffle/current song. Selects a random song
+//   {
+//     ButtonAcknowledge(BUTTON1);
 
-    if(current_song_index > 0)
-      current_song_index--;
+//     current_song_index = G_u32SystemTime1ms % num_of_songs;
+    
+//   }
 
-  }
+//   if(IsButtonPressed(BUTTON2)) // Scroll Left. Symbol Left arrow on ASCII
+//   {
+//     ButtonAcknowledge(BUTTON2);
 
-  if(IsButtonPressed(BUTTON3)) // Scroll Left. Symbol left arrow on ASCII
-  {
-    ButtonAcknowledge(BUTTON3);
+//     if(current_song_index > 0)
+//       current_song_index--;
+//   }
 
-    if (current_song_index < num_of_songs)
-      current_song_index++;
+//   if(IsButtonPressed(BUTTON3)) // Scroll Left. Symbol left arrow on ASCII
+//   {
+//     ButtonAcknowledge(BUTTON3);
 
-  }
+//     if (current_song_index < num_of_songs)
+//       current_song_index++;
+//   }
 
+// } /* end UserApp1SM_Idle() */
 
-
-  static u16 au16NotesRight[] =    {};
-  static u16 au16DurationRight[] = {};
+// static void Jukebox(u32 current_song_index) 
+// {
+  static u32 au32NotesRight[] =    {0, 294, 0, 330, 0, 370, 0, 392, 0, 440, 0, 467, 0, 494, 0, 494, 0, 494, 0, 494, 0, 494, 0, 392, 0, 660, 0, 623, 0, 660, 0, 392, 0, 440, 0, 494, 0, 524, 0, 588, 0, 660, 0, 623, 0, 699, 0, 660, 0, 392, 0, 588, 0, 555, 0, 588, 0, 392, 0, 440, 0, 494, 0, 524, 0, 555, 0, 588, 0, 392, 0, 699, 0, 660, 0, 392, 0, 784, 0, 784, 0, 784, 0, 784, 0, 880, 0, 784, 0, 699, 0, 699, 0, 699, 0, 699, 0, 784, 0, 699, 0, 660, 0, 440, 0, 494, 0, 699, 0, 660, 0, 660, 0, 660, 0, 494, 0, 524, 0, 294, 0, 330, 0, 370, 0, 392, 0, 440, 0, 467, 0, 494, 0, 494, 0, 494, 0, 494, 0, 494, 0, 392, 0, 660, 0, 623, 0, 660, 0, 392, 0, 440, 0, 494, 0, 524, 0, 588, 0, 660, 0, 623, 0, 699, 0, 660, 0, 392, 0, 588, 0, 555, 0, 588, 0, 392, 0, 440, 0, 494, 0, 524, 0, 555, 0, 588, 0, 392, 0, 699, 0, 660, 0, 392, 0, 784, 0, 784, 0, 784, 0, 784, 0, 880, 0, 784, 0, 699, 0, 699, 0, 699, 0, 699, 0, 784, 0, 699, 0, 660, 0, 440, 0, 494, 0, 699, 0, 660, 0, 660, 0, 660, 0, 494, 0, 524, 0};
+  static u32 au32DurationRight[] = {0, 270, 3, 270, 3, 270, 3, 270, 3, 270, 3, 270, 3, 134, 3, 134, 3, 182, 91, 182, 91, 543, 139, 134, 3, 815, 3, 815, 3, 815, 139, 134, 3, 134, 3, 134, 3, 134, 3, 134, 3, 815, 3, 543, 3, 270, 3, 815, 685, 134, 3, 815, 3, 815, 3, 815, 139, 134, 3, 134, 3, 134, 3, 134, 3, 134, 3, 815, 3, 543, 3, 270, 3, 815, 685, 134, 3, 815, 3, 815, 3, 815, 3, 270, 3, 270, 139, 134, 3, 815, 3, 815, 3, 815, 3, 270, 3, 270, 139, 134, 3, 815, 3, 270, 3, 270, 3, 270, 3, 134, 3, 134, 3, 406, 3, 134, 3, 815, 3, 270, 3, 270, 3, 270, 3, 270, 3, 270, 3, 270, 3, 134, 3, 134, 3, 182, 91, 182, 91, 543, 139, 134, 3, 815, 3, 815, 3, 815, 139, 134, 3, 134, 3, 134, 3, 134, 3, 134, 3, 815, 3, 543, 3, 270, 3, 815, 685, 134, 3, 815, 3, 815, 3, 815, 139, 134, 3, 134, 3, 134, 3, 134, 3, 134, 3, 815, 3, 543, 3, 270, 3, 815, 685, 134, 3, 815, 3, 815, 3, 815, 3, 270, 3, 270, 139, 134, 3, 815, 3, 815, 3, 815, 3, 270, 3, 270, 139, 134, 3, 815, 3, 270, 3, 270, 3, 270, 3, 134, 3, 134, 3, 406, 3, 134, 3, 815};
  
-  static u16 au16NotesLeft[] = {};
-  static u16 au16DurationLeft[] = {};
+  static u32 au32NotesLeft[] = {0, 294, 0, 278, 0, 262, 0, 247, 0, 262, 0, 278, 0, 294, 0, 294, 0, 294, 0, 330, 0, 350, 0, 392, 0, 370, 0, 392, 0, 392, 0, 370, 0, 440, 0, 392, 0, 350, 0, 330, 0, 350, 0, 350, 0, 247, 0, 440, 0, 392, 0, 660, 0, 588, 0, 555, 0, 588, 0, 555, 0, 524, 0, 262, 0, 350, 0, 392, 0, 494, 0, 494, 0, 494, 0, 494, 0, 350, 0, 330, 0, 294, 0, 278, 0, 262, 0, 247, 0, 262, 0, 278, 0, 294, 0, 294, 0, 294, 0, 330, 0, 350, 0, 392, 0, 370, 0, 392, 0, 392, 0, 370, 0, 440, 0, 392, 0, 350, 0, 330, 0, 350, 0, 350, 0, 247, 0, 440, 0, 392, 0, 660, 0, 588, 0, 555, 0, 588, 0, 555, 0, 524, 0, 262, 0, 350, 0, 392, 0, 494, 0, 494, 0, 494, 0, 494, 0, 350, 0, 330, 0};
+  static u32 au32DurationLeft[] = {0, 270, 3, 270, 3, 270, 3, 270, 3, 270, 3, 270, 3, 134, 3, 134, 3, 270, 3, 270, 3, 543, 276, 815, 3, 815, 3, 815, 821, 815, 3, 543, 3, 270, 3, 815, 821, 815, 3, 815, 3, 815, 821, 815, 3, 543, 3, 270, 3, 815, 821, 815, 3, 815, 3, 815, 821, 815, 3, 815, 3, 815, 821, 815, 3, 270, 3, 270, 3, 270, 3, 134, 3, 134, 3, 270, 139, 134, 3, 815, 3, 270, 3, 270, 3, 270, 3, 270, 3, 270, 3, 270, 3, 134, 3, 134, 3, 270, 3, 270, 3, 543, 276, 815, 3, 815, 3, 815, 821, 815, 3, 543, 3, 270, 3, 815, 821, 815, 3, 815, 3, 815, 821, 815, 3, 543, 3, 270, 3, 815, 821, 815, 3, 815, 3, 815, 821, 815, 3, 815, 3, 815, 821, 815, 3, 270, 3, 270, 3, 270, 3, 134, 3, 134, 3, 270, 139, 134, 3, 815};
   
   static u32 u32IndexRight = 0;
   static u32 u32RightTimer = 0;
-  static u16 u16CurrentDurationRight = 0;
+  static u32 u32CurrentDurationRight = 0;
 
   static u32 u32IndexLeft = 0;
   static u32 u32LeftTimer = 0;
-  static u16 u16CurrentDurationLeft = 0;
+  static u32 u32CurrentDurationLeft = 0;
 
   u32 u32CurrentIndex;
 
-  if(IsTimeUp(&u32RightTimer, (u32)u16CurrentDurationRight))
+  if(IsTimeUp(&u32RightTimer, (u32)u32CurrentDurationRight))
   {
     u32RightTimer = G_u32SystemTime1ms;
     u32CurrentIndex = u32IndexRight;
 
-    u16CurrentDurationRight = au16DurationRight[u32CurrentIndex];
+    u32CurrentDurationRight = au32DurationRight[u32CurrentIndex];
         
-    if(u32IndexRight < sizeof(au16NotesRight) / sizeof(u16))
+    if(u32IndexRight < sizeof(au32NotesRight) / sizeof(u32))
       u32IndexRight++;
 
-    if(au16NotesRight[u32CurrentIndex] != 0)
+    if(au32NotesRight[u32CurrentIndex] != 0)
     {
-      PWMAudioSetFrequency(BUZZER1, au16NotesRight[u32CurrentIndex]);
+      PWMAudioSetFrequency(BUZZER1, au32NotesRight[u32CurrentIndex]);
       PWMAudioOn(BUZZER1);
     }
     else
@@ -226,19 +241,19 @@ static void UserApp1SM_Idle(void)
     }
   }
 
-  if(IsTimeUp(&u32LeftTimer, (u32)u16CurrentDurationLeft))
+  if(IsTimeUp(&u32LeftTimer, (u32)u32CurrentDurationLeft))
   {
     u32LeftTimer = G_u32SystemTime1ms;
-   u32CurrentIndex = u32IndexLeft;
+    u32CurrentIndex = u32IndexLeft;
 
-    u16CurrentDurationLeft = au16DurationLeft[u32CurrentIndex];
+    u32CurrentDurationLeft = au32DurationLeft[u32CurrentIndex];
 
-    if(u32IndexLeft < sizeof(au16NotesLeft) / sizeof(u16))
+    if(u32IndexLeft < sizeof(au32NotesLeft) / sizeof(u32))
       u32IndexLeft++;
 
-    if(au16NotesRight[u32CurrentIndex] != 0)
+    if(au32NotesRight[u32CurrentIndex] != 0)
     {
-      PWMAudioSetFrequency(BUZZER2, au16NotesLeft[u32CurrentIndex]);
+      PWMAudioSetFrequency(BUZZER2, au32NotesLeft[u32CurrentIndex]);
       PWMAudioOn(BUZZER2);
     }
     else
@@ -246,8 +261,8 @@ static void UserApp1SM_Idle(void)
       PWMAudioOff(BUZZER2);
     }
   }
-} /* end UserApp1SM_Idle() */
-     
+
+} // end Jukebox()
 
 /*-------------------------------------------------------------------------------------------------------------------*/
 /* Handle an error */
@@ -255,9 +270,6 @@ static void UserApp1SM_Error(void)
 {
   
 } /* end UserApp1SM_Error() */
-
-
-
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* End of File                                                                                                        */
