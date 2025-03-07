@@ -50,7 +50,8 @@ State Machine Declarations
 static void UserApp1SM_Idle(void);    
 static void UserApp1SM_Error(void);         
 
-static void Jukebox(u32);
+static void Overworld(void);
+static void Underwater(void);
 
 
 /**********************************************************************************************************************
