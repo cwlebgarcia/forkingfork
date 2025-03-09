@@ -114,12 +114,12 @@ def read_meta(filename):
 
 # ****************************************************************************************************************************
 
-# track_viewer('Wii Channels - Mii Channel.mid')
-# midi_converter(['underwater.mid'])
-# read_meta('Wii Channels - Mii Channel.mid')
+# track_viewer('tetris.mid')
+midi_converter(['tetris.mid'])
+# read_meta('tetris.mid')
 
 # track_viewer('overworld.mid')
-midi_converter(files)
+# midi_converter(files)
 # read_meta('overworld.mid')
 
 # ****************************************************************************************************************************
