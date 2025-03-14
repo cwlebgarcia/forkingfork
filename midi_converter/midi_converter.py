@@ -68,7 +68,7 @@ def midi_converter(files):
                 if msg.time == 0:
                     continue
                 elif msg.time > 0:
-                    lengths.append(round(mido.tick2second(msg.time, ticks_per_beat, tempo) * 1000 / 5)) # Append the duration of the note in ms (rounded to the nearest whole number)
+                    lengths.append(round(mido.tick2second(msg.time, ticks_per_beat, tempo) * 1000 / 40)) # Append the duration of the note in ms (rounded to the nearest whole number)
                 else:
                     print('Might be cooked')
             
@@ -115,7 +115,7 @@ def read_meta(filename):
 # ****************************************************************************************************************************
 
 # track_viewer('Overworld2.mid')
-midi_converter(['callmemaybe.mid'])
+midi_converter(['sandstorm.mid'])
 # read_meta('callmemaybe.mid')
 
 # track_viewer('overworld.mid')

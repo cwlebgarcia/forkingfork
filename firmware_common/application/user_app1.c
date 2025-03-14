@@ -94,6 +94,8 @@ void UserApp1Initialize(void)
 
   LcdCommand(LCD_CLEAR_CMD);
 
+  LcdMessage(LINE1_START_ADDR, "Song: SMB Overworld");
+
   LcdMessage(LINE2_START_ADDR, ">");
   LcdMessage(LINE2_START_ADDR + 5, "SHF");
   LcdMessage(LINE2_START_ADDR + 12, "<-");
@@ -146,14 +148,12 @@ State Machine Function Definitions
 /* Jukebox Interface*/
 static void UserApp1SM_Idle(void)
 {
-  static u8 *list_of_songs[20] = {"Overworld", "Underwater", "Zelda", "Moon"};
-  static void (*song[])(void) = {Overworld, Underwater, Zelda, Sonic};
+  static u8 *list_of_songs[20] = {"SMB Overworld", "SMB Underwater", "Zelda"};
+  static void (*song[])(void) = {Overworld, Underwater, Zelda};
   static u8 song_index = 0;
-  static u8 num_songs = 4;
-  shuffling = TRUE;
-
-  LcdCommand(LCD_HOME_CMD);
-  LcdMessage(LINE1_START_ADDR, list_of_songs[song_index]);
+  static u8 num_songs = 3;
+  static bool was_incremented = FALSE;
+  was_incremented = FALSE;
 
   if (WasButtonPressed(BUTTON0))
   {
@@ -167,8 +167,8 @@ static void UserApp1SM_Idle(void)
     ButtonAcknowledge(BUTTON1);
     if (!shuffling)
       shuffling = TRUE;
-    // else                     // Ideally I find a way to make the system pause here for a bit between songs
-    // SystemSleep();
+    LcdClearChars(LINE1_START_ADDR + 5, 20);
+    LcdMessage(LINE1_START_ADDR + 5, list_of_songs[G_u32SystemTime1s % num_songs]);
     UserApp1_pfStateMachine = song[G_u32SystemTime1s % num_songs];
   }
 
@@ -176,20 +176,22 @@ static void UserApp1SM_Idle(void)
   {
     ButtonAcknowledge(BUTTON2);
     shuffling = FALSE;
-    if (song_index > 0)
+    if (song_index > 0 && !was_incremented)
     {
       song_index--;
-      LcdCommand(LCD_CLEAR_CMD);
+      LcdClearChars(LINE1_START_ADDR + 5, 20);
+      LcdMessage(LINE1_START_ADDR + 5, list_of_songs[song_index]);
     }
   }
 
   if (WasButtonPressed(BUTTON3))
   {
     ButtonAcknowledge(BUTTON3);
-    if (song_index < num_songs)
+    if (song_index < num_songs - 1 && !was_incremented)
     {
       song_index++;
-      LcdCommand(LCD_CLEAR_CMD);
+      LcdClearChars(LINE1_START_ADDR + 5, 20);
+      LcdMessage(LINE1_START_ADDR + 5, list_of_songs[song_index]);
     }
   }
 
@@ -465,95 +467,95 @@ static void Zelda(void)
 
 } // End Zelda()
 
-static void Sonic(void)
-{
-  static u16 melody[] = {};
-  static u16 melody_durations[] = {};
-  static u16 harmony[] = {};
-  static u16 harmony_durations[] = {};
+// static void Sandstorm(void)
+// {
+//   static u16 melody[] = {0, 294, 0, 294, 0, 294, 0, 294, 0, 294, 0, 294, 0, 294, 0, 294, 0, 294, 0, 294, 0, 294, 0, 294, 0, 392, 0, 392, 0, 392, 0, 392, 0, 392, 0, 392, 0, 392, 0, 350, 0, 350, 0, 350, 0, 350, 0, 350, 0, 350, 0, 350, 0, 262, 0, 294, 0, 294, 0, 294, 0, 294, 0, 294, 0, 294, 0, 294, 0, 294, 0, 294, 0, 294, 0, 294, 0, 294, 0, 392, 0, 392, 0, 294, 0, 294, 0, 294, 0, 294, 0, 294, 0, 294, 0, 294, 0, 294, 0, 294, 0, 294, 0, 294, 0, 294, 0, 392, 0, 392, 0};
+//   static u16 melody_durations[] = {0, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44};
+//   static u16 harmony[] = ;
+//   static u16 harmony_durations[] = s;
 
-  static u32 u32IndexRight = 0;
-  static u32 u32RightTimer = 0;
-  static u32 u32CurrentDurationRight = 0;
+//   static u32 u32IndexRight = 0;
+//   static u32 u32RightTimer = 0;
+//   static u32 u32CurrentDurationRight = 0;
 
-  static u32 u32IndexLeft = 0;
-  static u32 u32LeftTimer = 0;
-  static u32 u32CurrentDurationLeft = 0;
+//   static u32 u32IndexLeft = 0;
+//   static u32 u32LeftTimer = 0;
+//   static u32 u32CurrentDurationLeft = 0;
 
-  static u32 u32CurrentIndex = 0;
+//   static u32 u32CurrentIndex = 0;
 
-  static bool playingRight = TRUE;
-  static bool playingLeft = TRUE;
+//   static bool playingRight = TRUE;
+//   static bool playingLeft = TRUE;
 
-  if (IsTimeUp(&u32RightTimer, (u32)u32CurrentDurationRight))
-  {
-    u32RightTimer = G_u32SystemTime1ms;
-    u32CurrentIndex = u32IndexRight;
+//   if (IsTimeUp(&u32RightTimer, (u32)u32CurrentDurationRight))
+//   {
+//     u32RightTimer = G_u32SystemTime1ms;
+//     u32CurrentIndex = u32IndexRight;
 
-    u32CurrentDurationRight = melody_durations[u32CurrentIndex];
+//     u32CurrentDurationRight = melody_durations[u32CurrentIndex];
 
-    if (u32IndexRight < sizeof(melody) / sizeof(u16))
-      u32IndexRight++;
-    else
-      playingRight = FALSE;
+//     if (u32IndexRight < sizeof(melody) / sizeof(u16))
+//       u32IndexRight++;
+//     else
+//       playingRight = FALSE;
 
-    if (melody[u32CurrentIndex] != 0)
-    {
-      PWMAudioSetFrequency(BUZZER1, melody[u32CurrentIndex]);
-      PWMAudioOn(BUZZER1);
-    }
-    else
-    {
-      PWMAudioOff(BUZZER1);
-    }
-  }
+//     if (melody[u32CurrentIndex] != 0)
+//     {
+//       PWMAudioSetFrequency(BUZZER1, melody[u32CurrentIndex]);
+//       PWMAudioOn(BUZZER1);
+//     }
+//     else
+//     {
+//       PWMAudioOff(BUZZER1);
+//     }
+//   }
 
-  if (IsTimeUp(&u32LeftTimer, (u32)u32CurrentDurationLeft))
-  {
-    u32LeftTimer = G_u32SystemTime1ms;
-    u32CurrentIndex = u32IndexLeft;
+//   if (IsTimeUp(&u32LeftTimer, (u32)u32CurrentDurationLeft))
+//   {
+//     u32LeftTimer = G_u32SystemTime1ms;
+//     u32CurrentIndex = u32IndexLeft;
 
-    u32CurrentDurationLeft = harmony_durations[u32CurrentIndex];
+//     u32CurrentDurationLeft = harmony_durations[u32CurrentIndex];
 
-    if (u32IndexLeft < sizeof(harmony) / sizeof(u16))
-      u32IndexLeft++;
-    else
-      playingLeft = FALSE;
+//     if (u32IndexLeft < sizeof(harmony) / sizeof(u16))
+//       u32IndexLeft++;
+//     else
+//       playingLeft = FALSE;
 
-    if (harmony[u32CurrentIndex] != 0)
-    {
-      PWMAudioSetFrequency(BUZZER2, harmony[u32CurrentIndex]);
-      PWMAudioOn(BUZZER2);
-    }
-    else
-    {
-      PWMAudioOff(BUZZER2);
-    }
-  }
+//     if (harmony[u32CurrentIndex] != 0)
+//     {
+//       PWMAudioSetFrequency(BUZZER2, harmony[u32CurrentIndex]);
+//       PWMAudioOn(BUZZER2);
+//     }
+//     else
+//     {
+//       PWMAudioOff(BUZZER2);
+//     }
+//   }
 
-  if (!(playingRight || playingLeft) || WasButtonPressed(BUTTON0) || WasButtonPressed(BUTTON1) || WasButtonPressed(BUTTON2) || WasButtonPressed(BUTTON3))
-  {
-    if (WasButtonPressed(BUTTON0) || WasButtonPressed(BUTTON1) || WasButtonPressed(BUTTON2) || WasButtonPressed(BUTTON3))
-      shuffling = FALSE;
-    ButtonAcknowledge(BUTTON0);
-    ButtonAcknowledge(BUTTON1);
-    ButtonAcknowledge(BUTTON2);
-    ButtonAcknowledge(BUTTON3);
-    PWMAudioOff(BUZZER1);
-    PWMAudioOff(BUZZER2);
-    u32IndexRight = 0;
-    u32RightTimer = 0;
-    u32CurrentDurationRight = 0;
-    u32IndexLeft = 0;
-    u32LeftTimer = 0;
-    u32CurrentDurationLeft = 0;
-    u32CurrentIndex = 0;
-    playingRight = TRUE;
-    playingLeft = TRUE;
-    UserApp1_pfStateMachine = UserApp1SM_Idle;
-  }
+//   if (!(playingRight || playingLeft) || WasButtonPressed(BUTTON0) || WasButtonPressed(BUTTON1) || WasButtonPressed(BUTTON2) || WasButtonPressed(BUTTON3))
+//   {
+//     if (WasButtonPressed(BUTTON0) || WasButtonPressed(BUTTON1) || WasButtonPressed(BUTTON2) || WasButtonPressed(BUTTON3))
+//       shuffling = FALSE;
+//     ButtonAcknowledge(BUTTON0);
+//     ButtonAcknowledge(BUTTON1);
+//     ButtonAcknowledge(BUTTON2);
+//     ButtonAcknowledge(BUTTON3);
+//     PWMAudioOff(BUZZER1);
+//     PWMAudioOff(BUZZER2);
+//     u32IndexRight = 0;
+//     u32RightTimer = 0;
+//     u32CurrentDurationRight = 0;
+//     u32IndexLeft = 0;
+//     u32LeftTimer = 0;
+//     u32CurrentDurationLeft = 0;
+//     u32CurrentIndex = 0;
+//     playingRight = TRUE;
+//     playingLeft = TRUE;
+//     UserApp1_pfStateMachine = UserApp1SM_Idle;
+//   }
 
-} // End
+// } // End
 
 /*-------------------------------------------------------------------------------------------------------------------*/
 /* Handle an error */

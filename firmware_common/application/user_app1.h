@@ -53,7 +53,7 @@ static void UserApp1SM_Error(void);
 static void Overworld(void);
 static void Underwater(void);
 static void Zelda(void);
-static void Sonic(void);
+// static void Sandstorm(void);
 
 
 /**********************************************************************************************************************
